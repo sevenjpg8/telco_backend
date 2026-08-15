@@ -17,26 +17,6 @@ VALUES (
     CURRENT_TIMESTAMP
 );
 
--- SUPERVISOR
-INSERT INTO usuario (
-    username,
-    password_hash,
-    rol,
-    supervisor_id,
-    activo,
-    created_at,
-    updated_at
-)
-VALUES (
-    'supervisor1',
-    '$2a$10$.QVPbSxgxIUF5sah1h9kLOmKxfNCF9oDxfBENsO7rxgmpwooRrYWO',
-    'SUPERVISOR',
-    NULL,
-    true,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
-);
-
 -- AGENTE
 INSERT INTO usuario (
     username,
@@ -71,6 +51,26 @@ VALUES (
     'back1',
     '$2a$10$lnFExFxK/tQxs89XcwEShOLm9FRve7TtxFnpBvIBUPdOMu5uU5WCm',
     'BACKOFFICE',
+    NULL,
+    true,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+-- SUPERVISOR
+INSERT INTO usuario (
+    username,
+    password_hash,
+    rol,
+    supervisor_id,
+    activo,
+    created_at,
+    updated_at
+)
+VALUES (
+    'supervisor1',
+    '$2a$10$.QVPbSxgxIUF5sah1h9kLOmKxfNCF9oDxfBENsO7rxgmpwooRrYWO',
+    'SUPERVISOR',
     NULL,
     true,
     CURRENT_TIMESTAMP,
