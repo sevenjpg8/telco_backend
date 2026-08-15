@@ -1,6 +1,5 @@
 # Variables de entorno
 .env
-application.properties
 
 # Logs
 logs
