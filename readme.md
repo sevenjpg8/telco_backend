@@ -117,13 +117,13 @@ telco-project/
 Ingresar a PostgreSQL y crear la base de datos:
 
 ```sql
-CREATE DATABASE telcoBD;
+CREATE DATABASE pruebaBD;
 ```
 
 También puede realizarse desde la terminal:
 
 ```bash
-createdb telcoBD
+createdb pruebaBD
 ```
 
 En Windows, si `createdb` no está disponible directamente, se puede ejecutar el comando desde **SQL Shell (psql)** o mediante **pgAdmin**.
@@ -152,7 +152,7 @@ Este archivo crea:
 Ejecutar:
 
 ```bash
-psql -U postgres -d telcoBD -f backend/src/main/resources/schema.sql
+psql -U postgres -d pruebaBD -f backend/src/main/resources/schema.sql
 ```
 
 También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**.
@@ -164,7 +164,7 @@ También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**
 Después de ejecutar `schema.sql`, ejecutar:
 
 ```bash
-psql -U postgres -d telcoBD -f backend/src/main/resources/data.sql
+psql -U postgres -d pruebaBD -f backend/src/main/resources/data.sql
 ```
 
 Este archivo contiene los datos iniciales necesarios para probar la aplicación.
@@ -190,7 +190,7 @@ backend/src/main/resources/application.properties
 Configurar los datos de conexión a PostgreSQL:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/telcoBD
+spring.datasource.url=jdbc:postgresql://localhost:5432/pruebaBD
 spring.datasource.username=postgres
 spring.datasource.password=TU_PASSWORD
 
@@ -206,7 +206,7 @@ jwt.expiration=86400000
 
 | Variable                     | Descripción                                    | Ejemplo                                     |
 | ---------------------------- | ---------------------------------------------- | ------------------------------------------- |
-| `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/telcoBD` |
+| `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/pruebaBD` |
 | `spring.datasource.username` | Usuario de PostgreSQL                          | `postgres`                                  |
 | `spring.datasource.password` | Contraseña de PostgreSQL                       | `TU_PASSWORD`                               |
 | `jwt.secret`                 | Clave utilizada para firmar los JWT            | `CLAVE_SECRETA_JWT`                         |
@@ -275,6 +275,33 @@ POST http://localhost:8080/api/v1/auth/login
 
 # 8. Ejecutar el frontend
 
+## 8.1 Configurar variables de entorno
+
+El frontend utiliza una variable de entorno para definir la URL base de la API.
+
+Dentro de la carpeta `frontend`, crear un archivo llamado:
+
+```text
+.env
+```
+Agregar:
+
+```text
+VITE_API_URL=http://localhost:8080/api/v1
+```
+La estructura debe quedar:
+
+```text
+frontend/
+├── src/
+├── package.json
+├── .env
+└── ...
+```
+> **Importante:** El archivo .env está incluido en .gitignore y no forma parte del repositorio. Por ello, debe crearse manualmente al configurar el proyecto localmente.
+
+## 8.2 Configurar variables de entorno
+
 Abrir otra terminal e ingresar a:
 
 ```bash
@@ -286,6 +313,8 @@ Instalar las dependencias:
 ```bash
 npm install
 ```
+
+## 8.3 Configurar variables de entorno
 
 Ejecutar el servidor de desarrollo:
 
@@ -521,7 +550,7 @@ Para ejecutar el proyecto desde cero:
 ```text
 1. Instalar Java 21, PostgreSQL y Node.js.
 2. Clonar el repositorio.
-3. Crear la base de datos telcoBD.
+3. Crear la base de datos pruebaBD.
 4. Ejecutar schema.sql.
 5. Ejecutar data.sql.
 6. Configurar application.properties.
