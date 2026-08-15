@@ -164,7 +164,7 @@ También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**
 Después de ejecutar `schema.sql`, ejecutar:
 
 ```bash
-psql -U postgres -d telco_db -f backend/src/main/resources/data.sql.sql
+psql -U postgres -d telco_db -f backend/src/main/resources/data.sql
 ```
 
 Este archivo contiene los datos iniciales necesarios para probar la aplicación.
@@ -414,7 +414,21 @@ Authorization: Bearer <TOKEN>
 
 # 12. Documentación de la API
 
-La especificación OpenAPI se encuentra en el proyecto y documenta:
+La API cuenta con documentación mediante **OpenAPI**.
+
+La especificación OpenAPI se encuentra en:
+
+```text
+docs/
+├── openapi.yaml
+└── index.html
+```
+
+La documentación interactiva está disponible mediante **Swagger UI** en GitHub Pages:
+
+**[Ver documentación interactiva de la API](https://sevenjpg8.github.io/telco_backend/)**
+
+La documentación incluye:
 
 * Endpoints.
 * Parámetros.
@@ -424,26 +438,35 @@ La especificación OpenAPI se encuentra en el proyecto y documenta:
 * Esquemas de datos.
 * Autenticación mediante JWT.
 
-```text
-docs/
-└── openapi.yaml
-```
-
-La especificación puede utilizarse para importar la API en herramientas compatibles con OpenAPI.
+La especificación `openapi.yaml` también puede utilizarse para importar la API en herramientas compatibles con OpenAPI.
 
 ---
 
-# 13. Documentación adicional
+# 13. Documentación del proyecto
 
-La carpeta `docs/` contiene documentación complementaria del proyecto:
+La documentación complementaria se encuentra en la carpeta `docs/`.
+
+### Diagrama de la solución
+
+**[Ver diagrama de la solución](https://sevenjpg8.github.io/telco_backend/diagrama-solucion)**
+
+Incluye una representación de la arquitectura y el flujo general entre frontend, backend, seguridad, servicios y base de datos.
+
+### Decisiones técnicas y guía de despliegue
+
+**[Ver decisiones técnicas y guía de despliegue](https://sevenjpg8.github.io/telco_backend/decisiones-tecnicas)**
+
+Documenta las principales decisiones técnicas del proyecto y los pasos necesarios para ejecutar la aplicación localmente.
+
+La estructura de documentación es:
 
 ```text
 docs/
 ├── diagrama-solucion.md
-└── decisiones-tecnicas-y-despliegue.md
+├── decisiones-tecnicas.md
+├── openapi.yaml
+└── index.html
 ```
-
-El documento de decisiones técnicas explica la arquitectura, las principales decisiones utilizadas y la guía de despliegue local.
 
 ---
 
@@ -483,7 +506,7 @@ telco-project/
 │
 ├── docs/
 │   ├── diagrama-solucion.md
-│   ├── decisiones-tecnicas-y-despliegue.md
+│   ├── decisiones-tecnicas.md
 │   └── openapi.yaml
 │
 └── README.md

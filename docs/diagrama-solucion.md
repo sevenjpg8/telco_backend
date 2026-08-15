@@ -1,3 +1,6 @@
+# Diagrama de la solución
+
+```mermaid
 flowchart TD
 
     A[Frontend<br>HTML + CSS + JavaScript]
@@ -20,9 +23,7 @@ flowchart TD
     G --> A
     H --> A
     I --> A
-
-
-# Diagrama de la solución
+```
 
 ## Arquitectura
 

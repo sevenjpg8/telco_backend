@@ -109,30 +109,44 @@ La API se documentó mediante OpenAPI 3.0.3. La especificación se encuentra en 
 ## 2. Estructura del proyecto
 
 ```text
-backend/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/example/telco_backend/
-│       │       ├── config/
-│       │       ├── controller/
-│       │       ├── dto/
-│       │       ├── entity/
-│       │       ├── exception/
-│       │       ├── repository/
-│       │       └── service/
-│       └── resources/
-│           └── application.properties
+telco-project/
 │
-├── schema.sql
-└── data.sql
-
-frontend/
-├── src/
-│   ├── js/
-│   ├── views/
-│   └── ...
-└── ...
+├── .mvn/
+│
+├── mvnw
+├── mvnw.cmd
+│
+├── backend/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── com/example/telco_backend/
+│   │       │       ├── config/
+│   │       │       ├── controller/
+│   │       │       ├── dto/
+│   │       │       ├── entity/
+│   │       │       ├── exception/
+│   │       │       ├── repository/
+│   │       │       └── service/
+│   │       │
+│   │       └── resources/
+│   │           └── application.properties
+│   │
+│   ├── pom.xml
+│   ├── schema.sql
+│   └── data.sql
+│
+├── frontend/
+│   ├── src/
+│   └── package.json
+│
+├── docs/
+│   ├── diagrama-solucion.md
+│   ├── decisiones-tecnicas.md
+│   ├── index.html
+│   └── openapi.yaml
+│
+└── README.md
 ```
 
 ---
