@@ -77,6 +77,14 @@ VALUES (
     CURRENT_TIMESTAMP
 );
 
+UPDATE usuario
+SET supervisor_id = (
+    SELECT id
+    FROM usuario
+    WHERE username = 'supervisor1'
+)
+WHERE username = 'agente1';
+
 -- =========================================
 -- VENTAS
 -- =========================================
