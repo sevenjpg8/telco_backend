@@ -1,0 +1,738 @@
+openapi: 3.0.3
+
+info:
+  title: Telco Backend API
+  description: API REST para la gestión de ventas de servicios Telco Fija Hogar.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor local
+
+tags:
+  - name: Auth
+    description: Autenticación de usuarios
+  - name: Ventas - Agente
+    description: Operaciones disponibles para agentes
+  - name: Ventas - Backoffice
+    description: Validación de ventas
+  - name: Ventas - Supervisor
+    description: Consulta y reportes del equipo
+
+paths:
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Iniciar sesión
+      description: Autentica un usuario y devuelve un token JWT.
+
+      security: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: agente1
+              password: Agente*123
+
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: eyJhbGciOiJIUzI1NiJ9...
+                rol: AGENTE
+
+        '400':
+          description: Solicitud inválida
+
+        '401':
+          description: Credenciales incorrectas
+
+
+  /ventas:
+    post:
+      tags:
+        - Ventas - Agente
+      summary: Registrar una venta
+      description: Registra una nueva venta en estado PENDIENTE.
+
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VentaRequest'
+            example:
+              dniCliente: '74859632'
+              nombreCliente: Carlos Ramirez
+              telefonoCliente: '987654321'
+              direccionCliente: Av. Brasil 123
+              planActual: Internet 300 Mbps
+              planNuevo: Internet 600 Mbps
+              codigoLlamada: CALL-001
+              producto: FIJA_HOGAR
+              monto: 129.90
+
+      responses:
+        '200':
+          description: Venta creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+
+        '400':
+          description: Datos inválidos
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+        '409':
+          description: El código de llamada ya existe
+
+
+  /ventas/mis-ventas:
+    get:
+      tags:
+        - Ventas - Agente
+      summary: Consultar mis ventas
+      description: Devuelve las ventas registradas por el agente autenticado.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+
+        - name: estado
+          in: query
+          required: false
+          description: Filtrar por estado de venta
+          schema:
+            $ref: '#/components/schemas/EstadoVenta'
+
+        - name: desde
+          in: query
+          required: false
+          description: Fecha inicial del filtro
+          schema:
+            type: string
+            format: date
+            example: '2026-08-01'
+
+        - name: hasta
+          in: query
+          required: false
+          description: Fecha final del filtro
+          schema:
+            type: string
+            format: date
+            example: '2026-08-31'
+
+        - name: page
+          in: query
+          required: false
+          description: Número de página. Comienza en 0.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+
+        - name: size
+          in: query
+          required: false
+          description: Cantidad de registros por página.
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+
+        - name: sort
+          in: query
+          required: false
+          description: Campo y dirección de ordenamiento.
+          schema:
+            type: string
+            example: fechaRegistro,desc
+
+      responses:
+        '200':
+          description: Lista paginada de ventas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageVenta'
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+
+  /ventas/pendientes:
+    get:
+      tags:
+        - Ventas - Backoffice
+      summary: Consultar ventas pendientes
+      description: Devuelve las ventas que se encuentran en estado PENDIENTE.
+
+      security:
+        - bearerAuth: []
+
+      responses:
+        '200':
+          description: Lista de ventas pendientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venta'
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+
+  /ventas/{id}/aprobar:
+    post:
+      tags:
+        - Ventas - Backoffice
+      summary: Aprobar una venta
+      description: Cambia el estado de una venta PENDIENTE a APROBADA y registra la fecha de validación.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la venta.
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
+      responses:
+        '200':
+          description: Venta aprobada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+
+        '400':
+          description: La venta no puede ser aprobada
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+        '404':
+          description: Venta no encontrada
+
+
+  /ventas/{id}/rechazar:
+    post:
+      tags:
+        - Ventas - Backoffice
+      summary: Rechazar una venta
+      description: Cambia el estado de una venta PENDIENTE a RECHAZADA y registra el motivo.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la venta.
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RechazoVentaRequest'
+            example:
+              motivoRechazo: Datos del cliente no válidos
+
+      responses:
+        '200':
+          description: Venta rechazada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+
+        '400':
+          description: El motivo de rechazo es obligatorio
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+        '404':
+          description: Venta no encontrada
+
+
+  /ventas/equipo:
+    get:
+      tags:
+        - Ventas - Supervisor
+      summary: Consultar ventas del equipo
+      description: Devuelve las ventas realizadas por los agentes asignados al supervisor autenticado.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+
+        - name: estado
+          in: query
+          required: false
+          description: Filtrar por estado.
+          schema:
+            $ref: '#/components/schemas/EstadoVenta'
+
+        - name: agenteId
+          in: query
+          required: false
+          description: Filtrar por ID del agente.
+          schema:
+            type: integer
+            format: int64
+            example: 2
+
+        - name: desde
+          in: query
+          required: false
+          description: Fecha inicial.
+          schema:
+            type: string
+            format: date
+            example: '2026-08-01'
+
+        - name: hasta
+          in: query
+          required: false
+          description: Fecha final.
+          schema:
+            type: string
+            format: date
+            example: '2026-08-31'
+
+      responses:
+        '200':
+          description: Ventas del equipo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venta'
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+
+  /reportes/resumen:
+    get:
+      tags:
+        - Ventas - Supervisor
+      summary: Obtener resumen de ventas
+      description: Devuelve conteos por estado, monto total aprobado y ventas agrupadas por día.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+
+        - name: desde
+          in: query
+          required: true
+          description: Fecha inicial del período.
+          schema:
+            type: string
+            format: date
+            example: '2026-08-01'
+
+        - name: hasta
+          in: query
+          required: true
+          description: Fecha final del período.
+          schema:
+            type: string
+            format: date
+            example: '2026-08-31'
+
+      responses:
+        '200':
+          description: Resumen generado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResumenResponse'
+              example:
+                pendientes: 3
+                aprobadas: 5
+                rechazadas: 2
+                montoTotalAprobadas: 559.50
+                ventasPorDia:
+                  - fecha: '2026-08-13'
+                    cantidad: 3
+                    monto: 349.70
+                  - fecha: '2026-08-14'
+                    cantidad: 2
+                    monto: 209.80
+
+        '400':
+          description: Rango de fechas inválido
+
+        '401':
+          description: Usuario no autenticado
+
+        '403':
+          description: El usuario no tiene permisos
+
+
+components:
+
+  securitySchemes:
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+  schemas:
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+
+        username:
+          type: string
+          example: agente1
+
+        password:
+          type: string
+          format: password
+          example: Agente*123
+
+
+    LoginResponse:
+      type: object
+      properties:
+
+        token:
+          type: string
+          description: Token JWT de autenticación.
+          example: eyJhbGciOiJIUzI1NiJ9...
+
+        rol:
+          type: string
+          enum:
+            - ADMIN
+            - AGENTE
+            - BACKOFFICE
+            - SUPERVISOR
+          example: AGENTE
+
+
+    VentaRequest:
+      type: object
+      required:
+        - dniCliente
+        - nombreCliente
+        - telefonoCliente
+        - direccionCliente
+        - planActual
+        - planNuevo
+        - codigoLlamada
+        - producto
+        - monto
+
+      properties:
+
+        dniCliente:
+          type: string
+          description: DNI del cliente. Debe contener 8 dígitos.
+          pattern: '^[0-9]{8}$'
+          example: '74859632'
+
+        nombreCliente:
+          type: string
+          minLength: 1
+          example: Carlos Ramirez
+
+        telefonoCliente:
+          type: string
+          description: Número telefónico de 9 dígitos.
+          pattern: '^[0-9]{9}$'
+          example: '987654321'
+
+        direccionCliente:
+          type: string
+          minLength: 1
+          example: Av. Brasil 123
+
+        planActual:
+          type: string
+          minLength: 1
+          example: Internet 300 Mbps
+
+        planNuevo:
+          type: string
+          minLength: 1
+          example: Internet 600 Mbps
+
+        codigoLlamada:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: CALL-001
+
+        producto:
+          type: string
+          minLength: 1
+          example: FIJA_HOGAR
+
+        monto:
+          type: number
+          format: double
+          minimum: 0
+          example: 129.90
+
+
+    Venta:
+      type: object
+      properties:
+
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+        agenteId:
+          type: integer
+          format: int64
+          example: 2
+
+        dniCliente:
+          type: string
+          example: '74859632'
+
+        nombreCliente:
+          type: string
+          example: Carlos Ramirez
+
+        telefonoCliente:
+          type: string
+          example: '987654321'
+
+        direccionCliente:
+          type: string
+          example: Av. Brasil 123
+
+        planActual:
+          type: string
+          example: Internet 300 Mbps
+
+        planNuevo:
+          type: string
+          example: Internet 600 Mbps
+
+        codigoLlamada:
+          type: string
+          example: CALL-001
+
+        producto:
+          type: string
+          example: FIJA_HOGAR
+
+        monto:
+          type: number
+          format: double
+          example: 129.90
+
+        estado:
+          $ref: '#/components/schemas/EstadoVenta'
+
+        motivoRechazo:
+          type: string
+          nullable: true
+          example: Datos del cliente no válidos
+
+        fechaRegistro:
+          type: string
+          format: date-time
+          example: '2026-08-14T10:30:00-05:00'
+
+        fechaValidacion:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-08-14T12:15:00-05:00'
+
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-08-14T10:30:00-05:00'
+
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-08-14T12:15:00-05:00'
+
+
+    EstadoVenta:
+      type: string
+      enum:
+        - PENDIENTE
+        - APROBADA
+        - RECHAZADA
+
+
+    RechazoVentaRequest:
+      type: object
+      required:
+        - motivoRechazo
+
+      properties:
+
+        motivoRechazo:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: Datos del cliente no válidos
+
+
+    PageVenta:
+      type: object
+      properties:
+
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Venta'
+
+        pageable:
+          type: object
+          properties:
+
+            pageNumber:
+              type: integer
+              example: 0
+
+            pageSize:
+              type: integer
+              example: 10
+
+        totalElements:
+          type: integer
+          format: int64
+          example: 10
+
+        totalPages:
+          type: integer
+          example: 1
+
+        first:
+          type: boolean
+          example: true
+
+        last:
+          type: boolean
+          example: true
+
+        number:
+          type: integer
+          example: 0
+
+        size:
+          type: integer
+          example: 10
+
+
+    ResumenResponse:
+      type: object
+      properties:
+
+        pendientes:
+          type: integer
+          format: int64
+          example: 3
+
+        aprobadas:
+          type: integer
+          format: int64
+          example: 5
+
+        rechazadas:
+          type: integer
+          format: int64
+          example: 2
+
+        montoTotalAprobadas:
+          type: number
+          format: double
+          example: 559.50
+
+        ventasPorDia:
+          type: array
+          items:
+            $ref: '#/components/schemas/VentaPorDiaResponse'
+
+
+    VentaPorDiaResponse:
+      type: object
+      properties:
+
+        fecha:
+          type: string
+          format: date
+          example: '2026-08-14'
+
+        cantidad:
+          type: integer
+          format: int64
+          example: 3
+
+        monto:
+          type: number
+          format: double
+          example: 349.70

@@ -1,0 +1,504 @@
+# Telco Backend
+
+API REST para la gestión del flujo de ventas de servicios **Telco Fija Hogar**, desarrollada con Java 21, Spring Boot 3 y PostgreSQL.
+
+El proyecto incluye:
+
+* Autenticación mediante JWT.
+* Control de acceso por roles.
+* Registro de ventas.
+* Aprobación y rechazo de ventas.
+* Consulta de ventas por agente.
+* Consulta de ventas por equipo.
+* Filtros por estado y fechas.
+* Reportes y resumen de ventas.
+* Frontend mínimo para demostrar el funcionamiento.
+* Documentación OpenAPI.
+
+---
+
+# 1. Tecnologías utilizadas
+
+## Backend
+
+* Java 21
+* Spring Boot 3
+* Spring Security
+* JWT
+* Spring Data JPA
+* Hibernate
+* Maven Wrapper
+
+## Base de datos
+
+* PostgreSQL
+
+## Frontend
+
+* Node.js
+* npm
+* JavaScript / HTML / CSS
+
+---
+
+# 2. Requisitos previos
+
+Antes de ejecutar el proyecto se debe tener instalado:
+
+* Java 21
+* PostgreSQL
+* Node.js y npm
+* Git
+* Navegador web
+
+**No es necesario instalar Maven manualmente**, ya que el proyecto incluye Maven Wrapper.
+
+Para verificar las instalaciones:
+
+### Windows
+
+Abrir PowerShell o CMD:
+
+```bash
+java -version
+psql --version
+node -v
+npm -v
+git --version
+```
+
+### Linux
+
+Abrir una terminal:
+
+```bash
+java -version
+psql --version
+node -v
+npm -v
+git --version
+```
+
+---
+
+# 3. Clonar el repositorio
+
+Clonar el proyecto:
+
+```bash
+git clone <URL_DEL_REPOSITORIO>
+```
+
+Ingresar a la carpeta:
+
+```bash
+cd <NOMBRE_DEL_PROYECTO>
+```
+
+La estructura principal debe ser similar a:
+
+```text
+telco-project/
+├── .mvn/
+├── mvnw
+├── mvnw.cmd
+├── backend/
+├── frontend/
+├── docs/
+└── README.md
+```
+
+---
+
+# 4. Configuración de la base de datos
+
+## 4.1 Crear la base de datos
+
+Ingresar a PostgreSQL y crear la base de datos:
+
+```sql
+CREATE DATABASE telco_db;
+```
+
+También puede realizarse desde la terminal:
+
+```bash
+createdb telco_db
+```
+
+En Windows, si `createdb` no está disponible directamente, se puede ejecutar el comando desde **SQL Shell (psql)** o mediante **pgAdmin**.
+
+---
+
+## 4.2 Ejecutar schema.sql
+
+El archivo:
+
+```text
+backend/src/main/resources/schema.sql
+```
+
+contiene la estructura de la base de datos.
+
+Este archivo crea:
+
+* Tabla `usuario`.
+* Tabla `venta`.
+* Secuencias.
+* Claves primarias.
+* Claves foráneas.
+* Restricción de código de llamada único.
+
+Ejecutar:
+
+```bash
+psql -U postgres -d telco_db -f backend/src/main/resources/schema.sql
+```
+
+También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**.
+
+---
+
+## 4.3 Ejecutar data.sql
+
+Después de ejecutar `schema.sql`, ejecutar:
+
+```bash
+psql -U postgres -d telco_db -f backend/src/main/resources/data.sql.sql
+```
+
+Este archivo contiene los datos iniciales necesarios para probar la aplicación.
+
+Incluye usuarios de prueba y ventas con diferentes estados:
+
+* `PENDIENTE`
+* `APROBADA`
+* `RECHAZADA`
+
+> **Importante:** ejecutar siempre `schema.sql` antes de `data.sql`.
+
+---
+
+# 5. Configuración del backend
+
+El archivo de configuración se encuentra en:
+
+```text
+backend/src/main/resources/application.properties
+```
+
+Configurar los datos de conexión a PostgreSQL:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/telco_db
+spring.datasource.username=postgres
+spring.datasource.password=TU_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=false
+
+jwt.secret=CLAVE_SECRETA_JWT
+jwt.expiration=86400000
+```
+
+## Variables de configuración
+
+| Variable                     | Descripción                                    | Ejemplo                                     |
+| ---------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/telco_db` |
+| `spring.datasource.username` | Usuario de PostgreSQL                          | `postgres`                                  |
+| `spring.datasource.password` | Contraseña de PostgreSQL                       | `TU_PASSWORD`                               |
+| `jwt.secret`                 | Clave utilizada para firmar los JWT            | `CLAVE_SECRETA_JWT`                         |
+| `jwt.expiration`             | Tiempo de expiración del token en milisegundos | `86400000`                                  |
+
+La contraseña de PostgreSQL y la clave JWT deben configurarse de acuerdo con el entorno local.
+
+---
+
+# 6. Puertos utilizados
+
+| Servicio   | Puerto | URL                            |
+| ---------- | -----: | ------------------------------ |
+| Backend    | `8080` | `http://localhost:8080`        |
+| API        | `8080` | `http://localhost:8080/api/v1` |
+| Frontend   | `5173` | `http://localhost:5173`        |
+| PostgreSQL | `5432` | `localhost:5432`               |
+
+El backend tiene CORS configurado para permitir solicitudes provenientes de:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# 7. Ejecutar el backend
+
+El proyecto incluye **Maven Wrapper**, por lo que no es necesario instalar Maven ni configurar la variable `PATH`.
+
+Desde la **raíz del proyecto**:
+
+### Windows
+
+```powershell
+.\mvnw.cmd -f backend/pom.xml spring-boot:run
+```
+
+### Linux
+
+```bash
+./mvnw -f backend/pom.xml spring-boot:run
+```
+
+También es posible ejecutar el backend directamente desde **Spring Boot Dashboard** en Visual Studio Code.
+
+El backend estará disponible en:
+
+```text
+http://localhost:8080
+```
+
+La API utiliza el prefijo:
+
+```text
+/api/v1
+```
+
+Por ejemplo, el endpoint de autenticación es:
+
+```text
+POST http://localhost:8080/api/v1/auth/login
+```
+
+---
+
+# 8. Ejecutar el frontend
+
+Abrir otra terminal e ingresar a:
+
+```bash
+cd frontend
+```
+
+Instalar las dependencias:
+
+```bash
+npm install
+```
+
+Ejecutar el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+El frontend estará disponible en:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# 9. Usuarios de prueba
+
+La base de datos incluye los siguientes usuarios:
+
+| Usuario       | Contraseña   | Rol        |
+| ------------- | ------------ | ---------- |
+| `admin`       | `Admin*123`  | ADMIN      |
+| `agente1`     | `Agente*123` | AGENTE     |
+| `back1`       | `Back*123`   | BACKOFFICE |
+| `supervisor1` | `Sup*123`    | SUPERVISOR |
+
+Estos usuarios permiten probar los diferentes permisos y flujos de la aplicación.
+
+---
+
+# 10. Flujo funcional
+
+## Agente
+
+El agente puede:
+
+1. Iniciar sesión.
+2. Registrar una venta.
+3. Consultar sus propias ventas.
+4. Filtrar sus ventas por estado y rango de fechas.
+
+Las nuevas ventas se registran inicialmente como:
+
+```text
+PENDIENTE
+```
+
+---
+
+## Backoffice
+
+El usuario de backoffice puede:
+
+1. Iniciar sesión.
+2. Consultar ventas pendientes.
+3. Aprobar una venta.
+4. Rechazar una venta indicando un motivo.
+
+Cuando una venta es aprobada o rechazada, se registra la fecha de validación.
+
+---
+
+## Supervisor
+
+El supervisor puede:
+
+1. Consultar las ventas de sus agentes.
+2. Filtrar por estado.
+3. Filtrar por agente.
+4. Filtrar por rango de fechas.
+5. Consultar el resumen de ventas.
+
+El resumen incluye:
+
+* Conteo de ventas pendientes.
+* Conteo de ventas aprobadas.
+* Conteo de ventas rechazadas.
+* Monto total de ventas aprobadas.
+* Serie de ventas por día.
+
+---
+
+# 11. Endpoints principales
+
+La API está disponible bajo:
+
+```text
+/api/v1
+```
+
+### Autenticación
+
+```text
+POST /auth/login
+```
+
+### Agente
+
+```text
+POST /ventas
+GET  /ventas/mis-ventas
+```
+
+### Backoffice
+
+```text
+GET  /ventas/pendientes
+POST /ventas/{id}/aprobar
+POST /ventas/{id}/rechazar
+```
+
+### Supervisor
+
+```text
+GET /ventas/equipo
+GET /reportes/resumen
+```
+
+Las operaciones protegidas requieren un token JWT:
+
+```text
+Authorization: Bearer <TOKEN>
+```
+
+---
+
+# 12. Documentación de la API
+
+La especificación OpenAPI se encuentra en el proyecto y documenta:
+
+* Endpoints.
+* Parámetros.
+* Request bodies.
+* Respuestas.
+* Códigos HTTP.
+* Esquemas de datos.
+* Autenticación mediante JWT.
+
+La especificación puede utilizarse para importar la API en herramientas compatibles con OpenAPI.
+
+---
+
+# 13. Documentación adicional
+
+La carpeta `docs/` contiene documentación complementaria del proyecto:
+
+```text
+docs/
+├── diagrama-solucion.*
+└── decisiones-tecnicas-y-despliegue.md
+```
+
+El documento de decisiones técnicas explica la arquitectura, las principales decisiones utilizadas y la guía de despliegue local.
+
+---
+
+# 14. Estructura del proyecto
+
+```text
+telco-project/
+│
+├── .mvn/
+│
+├── mvnw
+├── mvnw.cmd
+│
+├── backend/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── com/example/telco_backend/
+│   │       │       ├── config/
+│   │       │       ├── controller/
+│   │       │       ├── dto/
+│   │       │       ├── entity/
+│   │       │       ├── exception/
+│   │       │       ├── repository/
+│   │       │       └── service/
+│   │       │
+│   │       └── resources/
+│   │           └── application.properties
+│   │
+│   ├── pom.xml
+│   ├── schema.sql
+│   └── data.sql
+│
+├── frontend/
+│   ├── src/
+│   └── package.json
+│
+├── docs/
+│   ├── diagrama-solucion.*
+│   └── decisiones-tecnicas-y-despliegue.md
+│
+└── README.md
+```
+
+---
+
+# 15. Orden recomendado de ejecución
+
+Para ejecutar el proyecto desde cero:
+
+```text
+1. Instalar Java 21, PostgreSQL y Node.js.
+2. Clonar el repositorio.
+3. Crear la base de datos telco_db.
+4. Ejecutar schema.sql.
+5. Ejecutar data.sql.
+6. Configurar application.properties.
+7. Ejecutar el backend mediante Maven Wrapper o Spring Boot Dashboard.
+8. Instalar las dependencias del frontend.
+9. Ejecutar el frontend.
+10. Iniciar sesión con uno de los usuarios de prueba.
+```
+
+Con estos pasos se puede ejecutar localmente el proyecto completo y probar el flujo de ventas Telco.

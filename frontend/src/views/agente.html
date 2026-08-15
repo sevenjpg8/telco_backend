@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel Agente</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+
+            <span class="navbar-brand">
+                Telco Backend
+            </span>
+
+            <div class="text-white">
+                Usuario: <strong id="username"></strong>
+
+                <button id="logoutButton" class="btn btn-outline-light btn-sm ms-3">
+                    Cerrar sesión
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <main class="container py-4">
+
+        <!-- Título -->
+        <div class="mb-4">
+            <h2>Panel de Agente</h2>
+            <p class="text-muted">
+                Registra nuevas ventas y consulta tus ventas registradas.
+            </p>
+        </div>
+
+
+        <!-- Mensajes -->
+        <div id="successMessage" class="alert alert-success d-none">
+        </div>
+
+        <div id="errorMessage" class="alert alert-danger d-none">
+        </div>
+
+
+        <!-- Registrar venta -->
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <h5 class="mb-0">Registrar venta</h5>
+            </div>
+
+            <div class="card-body">
+
+                <form id="ventaForm">
+
+                    <div class="row">
+
+                        <!-- DNI -->
+                        <div class="col-md-4 mb-3">
+                            <label for="dniCliente" class="form-label">
+                                DNI
+                            </label>
+
+                            <input type="text" class="form-control" id="dniCliente" maxlength="8" required>
+                        </div>
+
+
+                        <!-- Nombre -->
+                        <div class="col-md-4 mb-3">
+                            <label for="nombreCliente" class="form-label">
+                                Nombre del cliente
+                            </label>
+
+                            <input type="text" class="form-control" id="nombreCliente" required>
+                        </div>
+
+
+                        <!-- Teléfono -->
+                        <div class="col-md-4 mb-3">
+                            <label for="telefonoCliente" class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input type="text" class="form-control" id="telefonoCliente" maxlength="9" required>
+                        </div>
+
+
+                        <!-- Dirección -->
+                        <div class="col-md-6 mb-3">
+                            <label for="direccionCliente" class="form-label">
+                                Dirección
+                            </label>
+
+                            <input type="text" class="form-control" id="direccionCliente" required>
+                        </div>
+
+
+                        <!-- Plan actual -->
+                        <div class="col-md-3 mb-3">
+                            <label for="planActual" class="form-label">
+                                Plan actual
+                            </label>
+
+                            <input type="text" class="form-control" id="planActual" required>
+                        </div>
+
+
+                        <!-- Plan nuevo -->
+                        <div class="col-md-3 mb-3">
+                            <label for="planNuevo" class="form-label">
+                                Plan nuevo
+                            </label>
+
+                            <input type="text" class="form-control" id="planNuevo" required>
+                        </div>
+
+
+                        <!-- Código de llamada -->
+                        <div class="col-md-4 mb-3">
+                            <label for="codigoLlamada" class="form-label">
+                                Código de llamada
+                            </label>
+
+                            <input type="text" class="form-control" id="codigoLlamada" required>
+                        </div>
+
+
+                        <!-- Producto -->
+                        <div class="col-md-4 mb-3">
+                            <label for="producto" class="form-label">
+                                Producto
+                            </label>
+
+                            <select class="form-select" id="producto" required>
+
+                                <option value="">Seleccionar</option>
+                                <option value="FIJA_HOGAR">FIJA_HOGAR</option>
+
+                            </select>
+                        </div>
+
+
+                        <!-- Monto -->
+                        <div class="col-md-4 mb-3">
+                            <label for="monto" class="form-label">
+                                Monto
+                            </label>
+
+                            <input type="number" class="form-control" id="monto" step="0.01" min="0" required>
+                        </div>
+
+                    </div>
+
+
+                    <div class="mt-3">
+
+                        <button type="submit" class="btn btn-primary">
+
+                            Registrar venta
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+
+        <!-- Mis ventas -->
+        <div class="card shadow-sm">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    Mis ventas
+                </h5>
+
+                <button id="buscarVentasButton" class="btn btn-outline-primary btn-sm">
+
+                    Actualizar
+
+                </button>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <!-- Filtros -->
+                <div class="row mb-3">
+
+                    <div class="col-md-4">
+
+                        <label for="filtroEstado" class="form-label">
+                            Estado
+                        </label>
+
+                        <select id="filtroEstado" class="form-select">
+
+                            <option value="">Todos</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="APROBADA">Aprobada</option>
+                            <option value="RECHAZADA">Rechazada</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label for="filtroDesde" class="form-label">
+                            Desde
+                        </label>
+
+                        <input type="date" id="filtroDesde" class="form-control">
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label for="filtroHasta" class="form-label">
+                            Hasta
+                        </label>
+
+                        <input type="date" id="filtroHasta" class="form-control">
+
+                    </div>
+
+                </div>
+
+
+                <!-- Tabla -->
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>Cliente</th>
+                                <th>DNI</th>
+                                <th>Producto</th>
+                                <th>Plan nuevo</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="ventasTableBody">
+
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">
+
+                                    No hay ventas para mostrar.
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <button id="paginaAnterior" class="btn btn-outline-primary me-2">
+                        Anterior
+                    </button>
+
+                    <span id="paginaActual" class="align-self-center">
+                        Página 1
+                    </span>
+
+                    <button id="paginaSiguiente" class="btn btn-outline-primary ms-2">
+                        Siguiente
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module" src="/src/js/agente/agente.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telco Fija Hogar</title>
+</head>
+
+<body class="bg-light">
+  <div id="app">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+      <div class="card shadow-sm" style="width: 400px;">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h3 class="fw-bold">Telco Fija Hogar</h3>
+            <p class="text-muted mb-0">
+              Inicia sesión para continuar
+            </p>
+          </div>
+          <form id="loginForm">
+            <!-- Usuario -->
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                Usuario
+              </label>
+              <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario" required>
+            </div>
+            <!-- Contraseña -->
+            <div class="mb-3">
+              <label for="password" class="form-label">
+                Contraseña
+              </label>
+              <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+            </div>
+            <!-- Mensaje de error -->
+            <div id="loginError" class="alert alert-danger d-none" role="alert">
+            </div>
+            <!-- Botón -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">
+                Iniciar sesión
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/app.js"></script>
+
+</body>
+
+</html>
