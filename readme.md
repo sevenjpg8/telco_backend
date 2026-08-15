@@ -117,13 +117,13 @@ telco-project/
 Ingresar a PostgreSQL y crear la base de datos:
 
 ```sql
-CREATE DATABASE pruebaBD;
+CREATE DATABASE telcoBD;
 ```
 
 También puede realizarse desde la terminal:
 
 ```bash
-createdb pruebaBD
+createdb telcoBD
 ```
 
 En Windows, si `createdb` no está disponible directamente, se puede ejecutar el comando desde **SQL Shell (psql)** o mediante **pgAdmin**.
@@ -152,7 +152,7 @@ Este archivo crea:
 Ejecutar:
 
 ```bash
-psql -U postgres -d pruebaBD -f backend/src/main/resources/schema.sql
+psql -U postgres -d telcoBD -f backend/src/main/resources/schema.sql
 ```
 
 También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**.
@@ -164,7 +164,7 @@ También se puede ejecutar el archivo desde pgAdmin utilizando el **Query Tool**
 Después de ejecutar `schema.sql`, ejecutar:
 
 ```bash
-psql -U postgres -d pruebaBD -f backend/src/main/resources/data.sql
+psql -U postgres -d telcoBD -f backend/src/main/resources/data.sql
 ```
 
 Este archivo contiene los datos iniciales necesarios para probar la aplicación.
@@ -218,7 +218,7 @@ La propiedad spring.jpa.hibernate.ddl-auto=validate permite que Hibernate valide
 
 | Variable                     | Descripción                                    | Ejemplo                                     |
 | ---------------------------- | ---------------------------------------------- | ------------------------------------------- |
-| `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/pruebaBD` |
+| `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/telcoBD` |
 | `spring.datasource.username` | Usuario de PostgreSQL                          | `TU_USUARIO`                                  |
 | `spring.datasource.password` | Contraseña de PostgreSQL                       | `TU_PASSWORD`                               |
 | `jwt.secret`                 | Clave utilizada para firmar los JWT            | `CLAVE_SECRETA_JWT`                         |
@@ -562,7 +562,7 @@ Para ejecutar el proyecto desde cero:
 ```text
 1. Instalar Java 21, PostgreSQL y Node.js.
 2. Clonar el repositorio.
-3. Crear la base de datos pruebaBD.
+3. Crear la base de datos telcoBD.
 4. Ejecutar schema.sql.
 5. Ejecutar data.sql.
 6. Configurar application.properties.
