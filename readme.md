@@ -195,7 +195,7 @@ server.port=8080
 server.servlet.context-path=/api/v1
 
 spring.datasource.url=jdbc:postgresql://localhost:5432/telcoBD
-spring.datasource.username=postgres
+spring.datasource.username=TU_USUARIO
 spring.datasource.password=TU_PASSWORD
 spring.datasource.driver-class-name=org.postgresql.Driver
 
@@ -208,6 +208,10 @@ jwt.expiration=86400000
 
 logging.level.org.springframework.security=DEBUG
 ```
+> **Importante:** Este bloque corresponde a un application.properties de ejemplo. No es necesario crear otro archivo ni copiar los valores literalmente. Si el proyecto ya contiene application.properties, simplemente se deben reemplazar los valores de ejemplo por las credenciales y configuración del entorno local.
+
+La propiedad spring.jpa.hibernate.ddl-auto=validate permite que Hibernate valide que la estructura de la base de datos coincida con las entidades, sin modificarla automáticamente. La estructura de la base de datos debe crearse previamente mediante schema.sql.
+
 > **Nota de seguridad:** Para facilitar la ejecución local de la prueba técnica, estos valores se configuran directamente en `application.properties`. En un entorno de producción se recomienda externalizar las credenciales y la clave JWT mediante variables de entorno o un sistema de gestión de secretos.
 
 ## Variables de configuración
@@ -215,7 +219,7 @@ logging.level.org.springframework.security=DEBUG
 | Variable                     | Descripción                                    | Ejemplo                                     |
 | ---------------------------- | ---------------------------------------------- | ------------------------------------------- |
 | `spring.datasource.url`      | URL de conexión a PostgreSQL                   | `jdbc:postgresql://localhost:5432/pruebaBD` |
-| `spring.datasource.username` | Usuario de PostgreSQL                          | `postgres`                                  |
+| `spring.datasource.username` | Usuario de PostgreSQL                          | `TU_USUARIO`                                  |
 | `spring.datasource.password` | Contraseña de PostgreSQL                       | `TU_PASSWORD`                               |
 | `jwt.secret`                 | Clave utilizada para firmar los JWT            | `CLAVE_SECRETA_JWT`                         |
 | `jwt.expiration`             | Tiempo de expiración del token en milisegundos | `86400000`                                  |

@@ -192,7 +192,7 @@ spring.application.name=telco_backend
 server.port=8080
 server.servlet.context-path=/api/v1
 spring.datasource.url=jdbc:postgresql://localhost:5432/telcoBD
-spring.datasource.username=postgres
+spring.datasource.username=TU_USUARIO
 spring.datasource.password=TU_PASSWORD
 spring.datasource.driver-class-name=org.postgresql.Driver
 
