@@ -167,7 +167,7 @@ Para ejecutar el proyecto localmente se requiere:
 Crear una base de datos para el proyecto:
 
 ```sql
-CREATE DATABASE telco_db;
+CREATE DATABASE telcoBD;
 ```
 
 Después de crear la base de datos, ejecutar los siguientes archivos en este orden:
@@ -188,7 +188,7 @@ backend/src/main/resources/application.properties
 Ejemplo:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/telco_db
+spring.datasource.url=jdbc:postgresql://localhost:5432/telcoBD
 spring.datasource.username=postgres
 spring.datasource.password=TU_PASSWORD
 
