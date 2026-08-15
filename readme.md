@@ -190,15 +190,23 @@ backend/src/main/resources/application.properties
 Configurar los datos de conexión a PostgreSQL:
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/pruebaBD
+spring.application.name=telco_backend
+server.port=8080
+server.servlet.context-path=/api/v1
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/telcoBD
 spring.datasource.username=postgres
 spring.datasource.password=TU_PASSWORD
+spring.datasource.driver-class-name=org.postgresql.Driver
 
-spring.jpa.hibernate.ddl-auto=none
-spring.jpa.show-sql=false
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 
-jwt.secret=CLAVE_SECRETA_JWT
+jwt.secret=TU_CLAVE_SECRETA
 jwt.expiration=86400000
+
+logging.level.org.springframework.security=DEBUG
 ```
 > **Nota de seguridad:** Para facilitar la ejecución local de la prueba técnica, estos valores se configuran directamente en `application.properties`. En un entorno de producción se recomienda externalizar las credenciales y la clave JWT mediante variables de entorno o un sistema de gestión de secretos.
 
