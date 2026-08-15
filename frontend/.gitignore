@@ -1,3 +1,6 @@
+# Variables de entorno
+frontend/.env
+
 # Logs
 logs
 *.log

@@ -424,6 +424,11 @@ La especificación OpenAPI se encuentra en el proyecto y documenta:
 * Esquemas de datos.
 * Autenticación mediante JWT.
 
+```text
+docs/
+└── openapi.yaml
+```
+
 La especificación puede utilizarse para importar la API en herramientas compatibles con OpenAPI.
 
 ---
@@ -434,7 +439,7 @@ La carpeta `docs/` contiene documentación complementaria del proyecto:
 
 ```text
 docs/
-├── diagrama-solucion.*
+├── diagrama-solucion.md
 └── decisiones-tecnicas-y-despliegue.md
 ```
 
@@ -477,8 +482,9 @@ telco-project/
 │   └── package.json
 │
 ├── docs/
-│   ├── diagrama-solucion.*
-│   └── decisiones-tecnicas-y-despliegue.md
+│   ├── diagrama-solucion.md
+│   ├── decisiones-tecnicas-y-despliegue.md
+│   └── openapi.yaml
 │
 └── README.md
 ```
