@@ -32,13 +32,6 @@ public class VentaService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Venta getVentaById(@NonNull Long id) {
-
-        return ventaRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException(
-                        "Venta no encontrada"));
-    }
-
     public Venta createVenta(VentaRequest ventaRequest, String username) {
         Usuario agenteId = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));

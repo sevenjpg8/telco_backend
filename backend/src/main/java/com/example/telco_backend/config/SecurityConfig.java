@@ -31,12 +31,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
 
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/ventas").hasRole("AGENTE")
+                        .requestMatchers("/ventas/mis-ventas").hasRole("AGENTE")
                         .requestMatchers("/ventas/pendientes")
                         .hasAnyRole("BACKOFFICE", "ADMIN")
                         .requestMatchers("/ventas/*/aprobar")

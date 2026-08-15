@@ -189,6 +189,8 @@ Los valores de contraseña y clave JWT deben adaptarse al entorno local.
 
 La propiedad `spring.jpa.hibernate.ddl-auto=none` evita que Hibernate modifique automáticamente la estructura de la base de datos, ya que esta se encuentra definida mediante `schema.sql`.
 
+> **Nota de seguridad:** Para facilitar la ejecución local de la prueba técnica, estos valores se configuran directamente en `application.properties`. En un entorno de producción se recomienda externalizar las credenciales y la clave JWT mediante variables de entorno o un sistema de gestión de secretos.
+
 ## 3.4 Ejecución del backend
 
 Desde la carpeta `backend` ejecutar:
@@ -216,6 +218,21 @@ http://localhost:8080/api/v1/auth/login
 ```
 
 ## 3.5 Ejecución del frontend
+
+Crear un archivo `.env` dentro de la carpeta `frontend`:
+El frontend utiliza la variable de entorno `VITE_API_URL` para definir la URL base de la API backend.
+
+```text
+frontend/
+├── .env
+├── package.json
+├── src/
+└── ...
+```
+Contenido del archivo `.env`:
+```text
+VITE_API_URL=http://localhost:8080/api/v1
+```
 
 Desde la carpeta `frontend`, instalar las dependencias:
 

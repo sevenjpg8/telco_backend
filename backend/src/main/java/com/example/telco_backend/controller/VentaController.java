@@ -39,14 +39,6 @@ public class VentaController {
         return ResponseEntity.ok(createdVenta);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Venta> getVenta(@PathVariable @NonNull Long id) {
-
-        Venta venta = ventaService.getVentaById(id);
-
-        return ResponseEntity.ok(venta);
-    }
-
     @GetMapping("/mis-ventas")
     public ResponseEntity<Page<Venta>> getMisVentas(
             @RequestParam(required = false) EstadoVenta estado,

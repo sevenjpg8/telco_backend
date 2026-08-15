@@ -200,6 +200,7 @@ spring.jpa.show-sql=false
 jwt.secret=CLAVE_SECRETA_JWT
 jwt.expiration=86400000
 ```
+> **Nota de seguridad:** Para facilitar la ejecución local de la prueba técnica, estos valores se configuran directamente en `application.properties`. En un entorno de producción se recomienda externalizar las credenciales y la clave JWT mediante variables de entorno o un sistema de gestión de secretos.
 
 ## Variables de configuración
 
